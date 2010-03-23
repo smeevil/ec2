@@ -61,8 +61,7 @@ module Instances
       type=options[:type]||="m1.small"
       
       puts "launching instance of ami #{ami}..."
-      # puts "self.connection.launch_instances(#{ami}, :group_ids=>#{group}, :availability_zone=>#{zone}, :key_name=>#{key_pair.gsub(".pem","")}, :user_data=>#{description})"
-      self.connection.launch_instances(ami, :group_ids=>group, :availability_zone=>zone, :key_name=>key_pair.gsub(".pem",""), :instance_type=>type :user_data=>description)
+      self.connection.launch_instances(ami, :group_ids=>group, :availability_zone=>zone, :key_name=>key_pair.gsub(".pem",""), :instance_type=>type, :user_data=>description)
       puts "Instance is booting !"
       list
     end

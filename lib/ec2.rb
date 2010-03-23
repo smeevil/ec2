@@ -2,6 +2,7 @@
 
 require 'ec2/firewall'
 require 'ec2/instances'
+require 'ec2/volumes'
 
 # Git rid of ssl verification warning
 class Net::HTTP
@@ -17,6 +18,7 @@ end
 class Ec2
   include Firewall
   include Instances
+  include Volumes
   
   attr_accessor :access_key
   attr_accessor :secret_key
