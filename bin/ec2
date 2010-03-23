@@ -1,2 +1,34 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+require 'right_aws'
+require 'net/ssh'
+require 'open-uri'
 require 'ec2'
+
+
+
+
+def argv_to_hash(argv)
+  options=Hash.new
+  options[:config]="default"
+  argv.each do |arg|
+    opt=arg.split("=")
+    options[opt.first.gsub(/^--/,"").to_sym]=opt.last
+  end
+  return options
+end
+
+module_name=ARGV.shift.to_s.downcase
+command_name=ARGV.shift.to_s.downcase
+command_name="help" if command_name.empty?
+options = argv_to_hash(ARGV)
+
+@ec2=Ec2.new(options)
+
+puts "module_name : #{module_name}"
+puts "command_name : #{command_name}"
+puts "Config : #{options[:config]}"
+puts "options : #{options.inspect}"
+puts
+
+@ec2.send(module_name,@ec2,options).send(command_name)
