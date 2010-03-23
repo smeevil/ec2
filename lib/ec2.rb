@@ -1,6 +1,7 @@
 %w(active_support).each { |l| require l rescue nil }
 
 require 'ec2/firewall'
+require 'ec2/instances'
 
 # Git rid of ssl verification warning
 class Net::HTTP
@@ -15,11 +16,13 @@ end
 
 class Ec2
   include Firewall
+  include Instances
   
   attr_accessor :access_key
   attr_accessor :secret_key
   attr_accessor :key_pair
   attr_accessor :region
+  attr_accessor :zone
   attr_accessor :connection
   attr_accessor :options
   
@@ -32,6 +35,7 @@ class Ec2
     self.secret_key=config[options[:config]]["secret_key"]
     self.key_pair=config[options[:config]]["key_pair"]
     self.region=config[options[:config]]["region_info"]["region"]
+    self.zone=config[options[:config]]["region_info"]["zone"]
     
     self.connect
   end
@@ -46,6 +50,14 @@ end
 class Log
   def self.info(*args)
     # puts "INFO : #{args.inspect}"
+  end
+  
+  def self.error(*args)
+    puts "Error : #{args.inspect}"
+  end
+  
+  def self.warn(*args)
+    puts "Warning : #{args.inspect}"
   end
 end
 
