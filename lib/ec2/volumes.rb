@@ -75,6 +75,23 @@ module Volumes
       self.connection.create_snapshot(options[:volume])
     end
     
+    def listsnapshots
+      snaps=self.connection.describe_snapshots
+      if snaps.any?
+        snaps.each do |snap|
+          puts "#{snap[:aws_started_at]} volume : #{snap[:aws_volume_id]} => #{snap[:aws_id]} (#{snap[:aws_progress]})"
+        end
+      else
+        puts "No snapshots found yet..."
+      end
+    end
+    
+    def deletesnapshot
+      return puts("Please specify the snapshot id like : --snapshot=snap-21345") unless options[:snapshot] && options[:snapshot].present?
+      puts "Deleting #{options[:snapshot]} ..."
+      self.connection.ec2.delete_snapshot(options[:snapshot])
+    end
+    
     def attach
       return puts("Please specify the volume id and instance id ") unless options[:volume] && options[:volume].present? && options[:instance] && options[:instance].present?
       mount_point=options[:mountpoint]||='/dev/sdh'
