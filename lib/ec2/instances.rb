@@ -28,7 +28,7 @@ module Instances
       puts "    --group=my_sec_group *defaults to 'default'"
       puts "    --zone=eu-west-1b *defaults to '#{self.region}#{self.zone}'"
       puts "    --keypair=somekey.pem *defaults to '#{self.key_pair}'"
-      puts "- terminate"
+      puts "- terminate / reboot / log"
       puts "  Required : "
       puts "    --instance='i-f222222d'"
     end
@@ -72,6 +72,21 @@ module Instances
       self.connection.terminate_instances([options[:instance]])
       list
     end
+    
+    def reboot
+      return puts("please give an instance identifier like : --instance='i-f222222d'") unless options[:instance] && options[:instance].present?
+      puts "rebooting #{options[:instance]} ..."
+      self.connection.reboot_instances([options[:instance]])
+      list
+    end
+    
+    def log
+      return puts("please give an instance identifier like : --instance='i-f222222d'") unless options[:instance] && options[:instance].present?
+      puts "Fetching log for #{options[:instance]} ..."
+      puts self.connection.get_console_output([options[:instance]])
+      
+    end
+    
     
   end
 
