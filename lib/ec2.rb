@@ -1,8 +1,8 @@
 %w(active_support).each { |l| require l rescue nil }
 
-require 'ec2/firewall'
-require 'ec2/instances'
-require 'ec2/volumes'
+require "#{LIB_PATH}/ec2/firewall"
+require "#{LIB_PATH}/ec2/instances"
+require "#{LIB_PATH}/ec2/volumes"
 
 # Git rid of ssl verification warning
 class Net::HTTP

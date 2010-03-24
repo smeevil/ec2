@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
+LIB_PATH=File.expand_path(File.readlink(__FILE__)+"/../../lib")
+puts LIB_PATH
 require 'rubygems'
 require 'right_aws'
 require 'net/ssh'
 require 'open-uri'
-require 'ec2'
+require "#{LIB_PATH}/ec2"
 
 
 
@@ -31,4 +33,12 @@ puts "Config : #{options[:config]}"
 puts "options : #{options.inspect}"
 puts
 
-@ec2.send(module_name,@ec2,options).send(command_name)
+def help
+  puts "Available modules :"
+  puts " - firewall"
+  puts " - instances"
+  puts " - volumes"
+end
+
+module_name.present? ? @ec2.send(module_name,@ec2,options).send(command_name) : help
+
