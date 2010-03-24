@@ -3,6 +3,7 @@
 require "#{LIB_PATH}/ec2/firewall"
 require "#{LIB_PATH}/ec2/instances"
 require "#{LIB_PATH}/ec2/volumes"
+require "#{LIB_PATH}/ec2/ip"
 
 # Git rid of ssl verification warning
 class Net::HTTP
@@ -19,7 +20,8 @@ class Ec2
   include Firewall
   include Instances
   include Volumes
-  
+  include Ip
+    
   attr_accessor :access_key
   attr_accessor :secret_key
   attr_accessor :key_pair

@@ -38,6 +38,7 @@ def help
   puts " - firewall"
   puts " - instances"
   puts " - volumes"
+  puts " - ip"
 end
 
 module_name.present? ? @ec2.send(module_name,@ec2,options).send(command_name) : help
