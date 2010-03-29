@@ -28,7 +28,7 @@ module Instances
       puts "    --group=my_sec_group *defaults to 'default'"
       puts "    --zone=eu-west-1b *defaults to '#{self.region}#{self.zone}'"
       puts "    --keypair=somekey.pem *defaults to '#{self.key_pair}'"
-      puts "- terminate / reboot / log"
+      puts "- terminate / reboot / log / console"
       puts "  Required : "
       puts "    --instance='i-f222222d'"
     end
@@ -85,6 +85,21 @@ module Instances
       puts "Fetching log for #{options[:instance]} ..."
       puts self.connection.get_console_output([options[:instance]])
       
+    end
+    
+    def console
+      return puts("please give an instance identifier like : --instance='i-f222222d'") unless options[:instance] && options[:instance].present?
+      instances=self.connection.describe_instances
+      dns=nil
+      instances.each do |instance|
+        puts "checking #{instance[:aws_instance_id]}"
+        if instance[:aws_instance_id]==options[:instance]
+          dns=instance[:dns_name]
+          break 
+        end
+      end
+      return "No dns found for instance #{options[:instance]}" if dns.nil?
+      exec("ssh -i ~/.ec2/#{self.key_pair} root@#{dns}")
     end
     
     

@@ -6,6 +6,8 @@ require 'right_aws'
 require 'net/ssh'
 require 'open-uri'
 require "#{LIB_PATH}/ec2"
+require "#{LIB_PATH}/acf"
+require "#{LIB_PATH}/acw"
 
 
 
@@ -26,6 +28,8 @@ command_name="help" if command_name.empty?
 options = argv_to_hash(ARGV)
 
 @ec2=Ec2.new(options)
+@acf=Acf.new(options)
+@acw=Acw.new(options)
 
 puts "module_name : #{module_name}"
 puts "command_name : #{command_name}"
@@ -41,5 +45,11 @@ def help
   puts " - ip"
 end
 
-module_name.present? ? @ec2.send(module_name,@ec2,options).send(command_name) : help
-
+case module_name
+  when "distributions"
+    @acf.send(module_name,@acf,options).send(command_name)
+  when "metrics"
+    @acw.send(module_name,@acw,options).send(command_name)
+  else
+    module_name.present? ? @ec2.send(module_name,@ec2,options).send(command_name) : help  
+end
